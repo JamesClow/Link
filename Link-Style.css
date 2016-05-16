@@ -1,0 +1,8 @@
+body {
+    text-align: center;
+    margin: auto;
+}
+#message_board {
+    overflow-y: scroll;
+    height: 300px;
+}
