@@ -14,6 +14,8 @@
         <?php // is the user new / do they already have messages
         if(isset($_GET['chat_id']) && isset($_GET['chat_name'])){
             include 'Link-Board-Message.php';
+        }elseif (isset ($_GET['u_id'])){
+            include 'Link-User-Info.php';
         }else{
             include 'Link-Board-Welcome.php';
         }

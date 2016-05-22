@@ -13,9 +13,17 @@
 
         secure_session_start();
         if(check_login($mysqli) == true){
-            include 'Link-Active.php';
+            if(isset($_GET['member'])&&$_GET['member']=="new"){
+                include 'Link-Create-User-Info.php';
+            }else{
+                include 'Link-Active.php';
+            }
         }else{
-            include 'Link-Login.php';
+            if(isset($_GET['register'])&&$_GET['register']=='true'){
+                include 'Link-Register.php';
+            }else{
+                include 'Link-Login.php';
+            }
         }
         ?>
     </body>

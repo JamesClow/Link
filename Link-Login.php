@@ -22,6 +22,7 @@
                 }
             }
         ?>
+        <a href="Link-Home.php?register=true">New User</a>
         <form name="login" method="post" action="Link-Process-Login.php">
             Username: <input type="text" name="username"/><br>
             Password: <input type='text' name="password"/><br>

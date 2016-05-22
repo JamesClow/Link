@@ -1,8 +1,17 @@
 <head>
     <script>
         $(document).ready(function () {
-            var mb = $("#message_board");
+            var mb = $("#messages");
             mb.scrollTop(mb.prop("scrollHeight"));
+            
+            setInterval(function(){
+                var last_updated = mb.children().last().attr('time');
+                $.post('Link-Get-Messages.php', {lastTime: last_updated}, 
+                    function (text) {
+                        appendMessage(text);
+                    } 
+                )
+            }, 3000);
             
             $("#form").submit(function () {
                 $.ajax({
@@ -13,46 +22,56 @@
                     cache: false,
                     processData: false,
                     success: function (text) {
-                        var str = '<p>'.concat(text.toString()).concat("</p>");
-                        mb.append(str);
-                        mb.animate({scrollTop: mb.prop("scrollHeight") - mb.height()});
-                        
+                        appendMessage(text);
                     }
                 });
                 return false;
             });
+            
+            function appendMessage(text){
+                if(text){
+                    mb.append(text);
+                    mb.animate({scrollTop: mb.prop("scrollHeight") - mb.height()});
+                    $("#field").val('');
+                }
+            }
         });
+
     </script>
 </head>
-<?php
-    include 'Link-DB-Connect.php';
-    //find all individual chats for user
-    //$user_id = $_SESSION['user_id'];
-    $chat_id = $_GET['chat_id'];
-    $chat_name = $_GET['chat_name'];
-    echo "<h3>".$chat_name."</h3>";
-    echo '<div id="message_board">';
-    $result = $mysqli->prepare("SELECT text, user_id FROM message WHERE chat_id = ? ORDER BY created_at");
-    if($result){
-        $result->bind_param('i', $chat_id);
-        $result->execute();
-        $result->store_result();
-        $result->bind_result($text, $user_id);
-        if($result->num_rows > 0){
-            while($result->fetch()){
-                echo "<p>".$text."</p>";
+<div id="message_board">
+    <div id="messages" class="panel-body">
+        <?php
+            include 'Link-DB-Connect.php';
+            $chat_id = $_GET['chat_id'];
+            $_SESSION['chat_id'] = $chat_id;
+            $chat_name = $_GET['chat_name'];
+
+        //TODO if chat belongs to user
+
+            $request = $mysqli->prepare("SELECT text, created_at, user_id FROM message WHERE chat_id = ? ORDER BY created_at");
+            if($request){
+                $request->bind_param('i', $chat_id);
+                $request->execute();
+                $request->store_result();
+                $request->bind_result($text, $created_at, $user_id);
+                if($request->num_rows > 0){
+                    include 'Link-Message-Template.php';
+                }else{
+                    echo "no messages";
+                }
+            }else{
+                echo "messages not retrieved";
             }
-        }else{
-            echo "no messages";
-        }
-    }else{
-        echo "messages not retrieved";
-    }
-    echo '</div>';
-?>
-<form id="form" action="" method="post" enctype="multipart/form-data"><br>
-    <input type="text" name="text">
-    <input type="hidden" name="chat_id" value="<?php echo $_GET['chat_id']; ?>">
-    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-    <input type="submit" value="Send" name="submit"> 
-</form>
+            echo '</div>';
+        ?>
+        <div class="panel-footer">
+            <form id="form" class="form-horizontal" action="" method="post" enctype="multipart/form-data"><br>
+                <input id="field" class="form-control" type="text" name="text" placeholder="type message">
+                <input type="hidden" name="chat_id" value="<?php echo $_GET['chat_id']; ?>">
+                <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+            </form>
+        </div>
+    </div>
+    
+</div>
