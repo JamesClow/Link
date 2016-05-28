@@ -11,7 +11,7 @@
         if(login($username, $password, $mysqli)){
             header('Location: Link-Home.php');
         }else{
-            header('location: Link-Login.php?error=invalid');
+            header('Location: Link-Home.php?error=invalid');
         }
     }else{
         echo "invalid request";

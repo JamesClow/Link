@@ -1,10 +1,85 @@
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+}
+td {
+    padding: 5px;
+    padding-right: 20px;
+}
+
+.no-padding{
+    padding: 0px;
+}
+
+.row {
+    margin: 0; 
+}
+.content {
+    font-family: 'Open Sans', sans-serif;
+    padding-top: 20px;
+    border-left: 1px solid #CCC;
+    height: 100%;
+    background-color: #f6f6f6;
+}
+.title {
+    background-color: #99ccff;
+    color: #FFF;
+    border-bottom: 1px solid #AAA;
+    padding: 20px;
+    text-align: center;
+    font-size: 40px;
+}
+.me {
+    padding-top: 20px;
+    text-align: center;
+}
+.user-name {
+    color: #000;
+    font-size: 30px;
+}
+
+/* NAV */
+.nav-container {
+    padding-top: 15px;
+}
+.nav-tabs{
+    font-size: 18px;
+}
+.nav-list {
+    
+}
+.no-matches{
+    padding: 10px;
+}
+.my-info {
+    height: 42px;
+    padding-top: 10px;
+}
+.button.element{
+    font-size: 18px;
+    padding: 10px;
+    padding-left: 25px;
+}
+.button.element:hover {
+    background-color: #f2f2f2;
+}
+
+/* Message */ 
+
 #message_board{
     border: 1px solid #d7cec7;
+    border-radius: 5px;
 }
 .message {
-    margin-bottom: 5px;
-    padding-bottom: 5px;
+    padding: 5px;
     border-bottom: 1px dotted #B3A9A9;
+    font-size: 18px;
+}
+.message.self{
+    
+}
+.message.other{
+    background-color: #f6f6f6;
 }
 .message-head small{
     color: #b3b3b3;
@@ -15,12 +90,64 @@
 }
 
 .panel-body {
+    background-color: #FFF;
     overflow-y: scroll;
-    height: 250px;
+    height: 100px;
     padding-bottom: 0px;
+    border-radius: 5px;
 }
+
+.panel-footer {
+    background-color: #99ccff;
+}
+
 .time {
     text-align: right;
+}
+
+/* User Info */
+.user-head{
+}
+
+.info-container {
+    border: 1px solid #d7cec7;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #FFF;
+}
+.info .username {
+    display: inline-block;
+    font-size: 30px;
+}
+.info .location {
+    display: inline-block;
+}
+
+/* Forms */
+.content.flaoting-form {
+    
+}
+.form {
+    padding: 30px;
+    float: center;
+    width: 500px;
+    background-color: #FFF;
+    margin: auto;
+    font-size: 15px;
+}
+.form h1{
+    text-align: center;
+}
+.form h3{
+    text-align: center;
+}
+
+.form .error{
+    text-align: center;
+    color: #ff11ff;
+}
+.LINK {
+    font-family: 'Lobster', cursive;
 }
 
 ::-webkit-scrollbar-track

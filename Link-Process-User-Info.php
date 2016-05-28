@@ -44,10 +44,12 @@
             $insert->bind_param("sissssi", $city, $zip, $boulder, $sport, $trad, $bio, $_SESSION['user_id']);
             $insert->execute();
             if($mysqli->affected_rows > 0){
+                include 'Link-Match-Users.php';
                 header('Location: ./Link-Home.php');
             }
         }        
     }
+    header('Location: ./Link-Home.php');
     
     
     

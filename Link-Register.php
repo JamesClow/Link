@@ -36,17 +36,23 @@
     </script>
 </head>
 <body>
-    <?php 
-    if(isset($_GET['message'])){
-        echo $_GET['message'];    
-    }
-    ?>
-    <form id="resistation" name="registration-form" method="post" action="Link-Process-Registration.php">
-        Username: <input type="text" name="username"><br>
-        Email: <input type="text" name="email"><br>
-        Password: <input type="password" name="password"><br>
-        Confirm Password: <input type="password" name="confirm_password"><br>
-        <input type="button" value="Sumbit" onclick="submitHashed(this.form, this.form.username, this.form.email, this.form.password, this.form.confirm_password)"/>
-    </form>
-    <a href="Link-Login.php">Back to Login</a>
+    <div class="content flaoting-form">
+        <div class="form">
+            <h1 class="LINK">Link</h1>
+            <h3>Register</h3>
+            <?php 
+            if(isset($_GET['error'])){
+                echo '<div class="error">'.$_GET['error'].'</div>';    
+            }
+            ?>
+            <form id="resistation" name="registration-form" method="post" action="Link-Process-Registration.php">
+                Username: <input type="text" name="username" class="form-control"><br>
+                Email: <input type="text" name="email" class="form-control"><br>
+                Password: <input type="password" name="password" class="form-control"><br>
+                Confirm Password: <input type="password" name="confirm_password" class="form-control"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Sumbit" onclick="submitHashed(this.form, this.form.username, this.form.email, this.form.password, this.form.confirm_password)"/>
+            </form>
+            <a href="Link-Home.php">Back to Login</a>
+        </div>
+    </div>
 </body>

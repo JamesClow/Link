@@ -29,10 +29,13 @@ if($user_request){
                     $match_request->execute();
                     $match_request->store_result();
                     if ($match_request->num_rows <= 0){
+                        $new_chat = $mysqli->prepare("INSERT INTO chat (group_chat) VALUES (0)");
+                        $new_chat->execute();
+                        $chat_id = $mysqli->insert_id;
                         //create new match
-                        $create_match = $mysqli->prepare("INSERT INTO user_matches (A, B, relation) VALUES (?,?,'matched')");
+                        $create_match = $mysqli->prepare("INSERT INTO user_matches (A, B, relation, chat_id) VALUES (?,?,'matched',?)");
                         if($create_match){
-                            $create_match->bind_param("ii", $user_a, $user_b);
+                            $create_match->bind_param("iii", $user_a, $user_b,$chat_id);
                             $create_match->execute();
                             error_log("success");
 

@@ -12,7 +12,7 @@
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $message .= "this is not a valid email";
+            $message .= "email not valid<br>";
         }
         
         $request = $mysqli->prepare("SELECT id FROM members WHERE username = ? LIMIT 1");
@@ -38,7 +38,7 @@
                 $message .= "email already exists<br>";
             }
         }else{
-            $message .= "DB error<br>";
+            $message .= "db error<br>";
         }
         
         if($message == ''){
@@ -55,6 +55,6 @@
             }
             
         }else{
-            header('Location: ./Link-Home.php');
+            header('Location: ./Link-Home.php?register=true&error='.$message);
         }
     }

@@ -2,15 +2,15 @@
     if(isset($_GET['message'])){
         $type = $_GET['message'];
     }else{
-        $type = 'inv';
+        $type = 'matches';
     }
 ?>
 <ul class="nav nav-tabs">
     <li role="presentation" <?php if($type == 'matches'){ echo 'class="active"'; } ?>><a href="?message=matches">Matches</a></li>
-    <li role="presentation" <?php if($type == 'inv'){ echo 'class="active"'; } ?>><a href="?message=inv">Messages</a></li>
     <li role="presentation" <?php if($type == 'group'){ echo 'class="active"'; } ?>><a href="?message=group">Groups</a></li>
 </ul>
-<?php
+<div class="nav-list">
+    <?php
     include 'Link-DB-Connect.php';
     //find all individual chats for user
     $user_id = $_SESSION['user_id'];
@@ -26,19 +26,19 @@
                 while($users->fetch()){
                     if($u_id != $user_id){
                         if(isset($_GET['message'])){
-                            echo '<a href ="?message='.$_GET['message'].'&u_id='.$u_id.'"><div class="button">'.$u_name.'</div></a>';
+                            echo '<a href ="?message='.$_GET['message'].'&u_id='.$u_id.'"><div class="button element">'.$u_name.'</div></a>';
 
                         }else{
-                            echo '<a href ="?u_id='.$u_id.'"><div class="button">'.$u_name.'</div></a>';
+                            echo '<a href="?u_id='.$u_id.'"><div class="button element">'.$u_name.'</div></a>';
 
                         }
                     }
                 }
             }else{
-                echo "error";
+                echo '<div class="no-matches">no matches yet</div>';
             }
         }else{
-            echo "no user";
+            echo '<div class="no-matches">Could not connect to db. Try again later.</div>';
         }
     }else{
         $result = $mysqli->prepare("SELECT c.id, group_chat FROM user_chat uc INNER JOIN chat c ON c.id = uc.chat_id WHERE uc.user_id = ?");
@@ -69,23 +69,24 @@
                                     }
                                 }
                                 if(isset($_GET['message'])){
-                                    echo '<a href ="?message='.$_GET['message'].'&chat_id='.$id.'&chat_name='.$chat_name.'"><div class="button">'.$chat_name.'</div></a>';
+                                    echo '<a href ="?message='.$_GET['message'].'&chat_id='.$id.'&chat_name='.$chat_name.'"><div class="button element">'.$chat_name.'</div></a>';
 
                                 }else{
-                                    echo '<a href ="?chat_id='.$id.'&chat_name='.$chat_name.'"><div class="button">'.$chat_name.'</div></a>';
+                                    echo '<a href ="?chat_id='.$id.'&chat_name='.$chat_name.'"><div class="button element">'.$chat_name.'</div></a>';
 
                                 }
                             }else{
-                                echo "error";
+                                echo '<div class="no-matches">no matches yet</div>';
                             }
                         }else{
-                            echo "no user";
+                            echo '<div class="no-matches">Could not connect to db. Try again later.</div>';
                         }
                     }
                 }
             }else{
-                echo "<p> no messages </p>";
+                echo '<div class="no-matches">no messages</div>';
             }
         }
     }
-    
+    ?>
+</div>

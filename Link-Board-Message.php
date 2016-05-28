@@ -1,8 +1,12 @@
 <head>
     <script>
+        window.onresize = setEqualHeight;
+        
         $(document).ready(function () {
             var mb = $("#messages");
             mb.scrollTop(mb.prop("scrollHeight"));
+            
+            setEqualHeight();
             
             setInterval(function(){
                 var last_updated = mb.children().last().attr('time');
@@ -11,7 +15,7 @@
                         appendMessage(text);
                     } 
                 )
-            }, 3000);
+            }, 1000);
             
             $("#form").submit(function () {
                 $.ajax({
@@ -36,42 +40,61 @@
                 }
             }
         });
+        
+        function setEqualHeight() {
+            $('.panel-body').height($(window).height() - $('#user-info-container').height() - 220);
+
+        }
 
     </script>
 </head>
+<div id="message_board_head">
+    <h4>Messages</h4>
+</div>
 <div id="message_board">
     <div id="messages" class="panel-body">
         <?php
+        
             include 'Link-DB-Connect.php';
-            $chat_id = $_GET['chat_id'];
-            $_SESSION['chat_id'] = $chat_id;
-            $chat_name = $_GET['chat_name'];
-
-        //TODO if chat belongs to user
-
-            $request = $mysqli->prepare("SELECT text, created_at, user_id FROM message WHERE chat_id = ? ORDER BY created_at");
-            if($request){
-                $request->bind_param('i', $chat_id);
-                $request->execute();
-                $request->store_result();
-                $request->bind_result($text, $created_at, $user_id);
-                if($request->num_rows > 0){
-                    include 'Link-Message-Template.php';
+//TODO if chat belongs to user
+            $request_chat_id = $mysqli->prepare("SELECT chat_id FROM user_matches WHERE (A=? AND B=?) OR (A=? AND B=?)");
+            if($request_chat_id){
+                $request_chat_id->bind_param("iiii", $_SESSION['user_id'], $_GET['u_id'], $_GET['u_id'],  $_SESSION['user_id']);
+                $request_chat_id->execute();
+                $request_chat_id->store_result();
+                $request_chat_id->bind_result($chat_id);
+                if($request_chat_id->num_rows > 0){
+                    while($request_chat_id->fetch()){
+                        if($chat_id != ""){
+                            $_SESSION['chat_id'] = $chat_id;
+                            $request = $mysqli->prepare("SELECT text, created_at, user_id, user_name FROM message WHERE chat_id = ? ORDER BY created_at");
+                            if($request){
+                                $request->bind_param('i', $chat_id);
+                                $request->execute();
+                                $request->store_result();
+                                $request->bind_result($text, $created_at, $user_id, $user_name);
+                                if($request->num_rows > 0){
+                                    include 'Link-Message-Template.php';
+                                }else{
+                                    echo "Say Hello!";
+                                }
+                            }else{
+                                echo "messages not retrieved";
+                            }
+                        }   
+                    }
                 }else{
-                    echo "no messages";
+                    //chat has not been initalized
                 }
-            }else{
-                echo "messages not retrieved";
             }
-            echo '</div>';
         ?>
-        <div class="panel-footer">
-            <form id="form" class="form-horizontal" action="" method="post" enctype="multipart/form-data"><br>
-                <input id="field" class="form-control" type="text" name="text" placeholder="type message">
-                <input type="hidden" name="chat_id" value="<?php echo $_GET['chat_id']; ?>">
-                <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-            </form>
-        </div>
     </div>
-    
+    <div class="panel-footer">
+        <form id="form" class="form-horizontal" action="" method="post" enctype="multipart/form-data"><br>
+            <input id="field" class="form-control" type="text" name="text" placeholder="type message">
+            <input type="hidden" name="chat_id" value="<?php echo $_SESSION['chat_id']; ?>">
+            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+            <input type="hidden" name="u_id" value="<?php echo $_GET['u_id']; ?>">
+        </form>
+    </div>
 </div>

@@ -5,4 +5,4 @@
     $params = session_get_cookie_params();
     setcookie(session_name(),'',time()-10000);
     session_destroy();
-    header('Location: ./Link-Login.php');
+    header('Location: ./Link-Home.php');
